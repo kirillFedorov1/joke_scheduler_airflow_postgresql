@@ -75,7 +75,7 @@ def randomuser_parse():
     sa_to_ha = SQLExecuteQueryOperator(
         task_id="stage_to_history",
         conn_id="postgres",
-        sql='/scripts/randomuser_sa_to_ha.sql'
+        sql='/randomuser/sa_to_ha.sql'
     )
 
     parsed_data = parse_api()
