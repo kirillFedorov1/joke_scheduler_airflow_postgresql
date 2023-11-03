@@ -1,3 +1,6 @@
+create schema if not exists sa;
+create schema if not exists ha;
+
 create table if not exists ha.randomuser (
     id serial primary key,
     gender varchar(255),
