@@ -12,7 +12,7 @@ create table if not exists ha.earthquakes (
     longitude real,
     depth real,
     mag real,
-    magType varchar(255),
+    mag_type varchar(255),
     nst real,
     gap real,
     dmin real,
@@ -22,13 +22,13 @@ create table if not exists ha.earthquakes (
     updated timestamptz,
     place varchar(255),
     "type" varchar(255),
-    horizontalError real,
-    depthError real,
-    magError real,
-    magNst real,
+    horizontal_error real,
+    depth_error real,
+    mag_error real,
+    mag_nst real,
     "status" varchar(255),
-    locationSource varchar(255),
-    magSource varchar(255),
+    location_source varchar(255),
+    mag_source varchar(255),
     updated_at timestamptz default current_timestamp
 ) partition by range (time);
 
@@ -45,7 +45,7 @@ default;
 /* --- продолжения таблицы fact. Разделено для аккуратности.          --- */
 /* --- Главный ключ - id в таблице fact.earthquake_events.            --- */
 /* --- Он varchar(255) и парсится из api.                             --- */
-/* --- Также добавлены индексы и партиции по времени.                 --- */
+/* --- Также добавлены индексы.                                       --- */
 /* --- Данные сюда парсятся начиная с 2000.01.01;                     --- */
 /* --- все, что раньше - в ha.earthquakes.                            --- */
 /* ---------------------------------------------------------------------- */
@@ -58,16 +58,12 @@ create table if not exists fact.earthquake_events(
     "status" varchar(255),
     "time" timestamptz,
     mag real,
-    magType varchar(255),
+    mag_type varchar(255),
     updated_at timestamptz default current_timestamp
-) partition by range (time);
-
-create table if not exists fact.earthquake_events_all_part
-partition of fact.earthquake_events
-default;
+);
 
 create index idx_earthquake_events_time on fact.earthquake_events(time);
-create index idx_earthquake_events_mag on fact.earthquake_events(mag, magType);
+create index idx_earthquake_events_mag on fact.earthquake_events(mag, mag_type);
 
 create schema if not exists dim;
 
@@ -88,10 +84,10 @@ create table if not exists dim.earthquake_observations(
     gap real,
     dmin real,
     rms real,
-    horizontalError real,
-    depthError real,
-    magError real,
-    magNst real,
+    horizontal_error real,
+    depth_error real,
+    mag_error real,
+    mag_nst real,
     updated_at timestamptz default current_timestamp
 );
 
@@ -99,7 +95,7 @@ create table if not exists dim.earthquake_sources(
     event_id varchar(255) primary key references fact.earthquake_events(id),
     net varchar(255),
     updated timestamptz,
-    locationSource varchar(255),
-    magSource varchar(255),
+    location_source varchar(255),
+    mag_source varchar(255),
     updated_at timestamptz default current_timestamp
 );

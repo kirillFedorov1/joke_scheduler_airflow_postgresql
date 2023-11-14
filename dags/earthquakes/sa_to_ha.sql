@@ -1,0 +1,25 @@
+insert into ha.earthquakes
+select
+    cast("time" as timestamptz) as time,
+    latitude,
+    longitude,
+    depth,
+    mag,
+    "magType" as mag_type,
+    nst,
+    gap,
+    dmin,
+    rms,
+    net,
+    id,
+    cast(updated as timestamptz) as updated,
+    place,
+    "type",
+    "horizontalError" as horizontal_error,
+    "depthError" as depth_error,
+    "magError" as mag_error,
+    "magNst" as mag_nst,
+    "status",
+    "locationSource" as location_source,
+    "magSource" as mag_source
+from sa.earthquakes;
